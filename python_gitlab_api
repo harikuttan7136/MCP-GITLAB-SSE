@@ -1,0 +1,31 @@
+import requests
+import os
+
+GITLAB_API_URL = "https://gitlab.com/api/v4"
+GITLAB_PERSONAL_ACCESS_TOKEN = os.getenv("GITLAB_PERSONAL_ACCESS_TOKEN")  # Replace with your actual token
+
+# Replace these with your actual values
+options = {
+    "name": "tryout_sse",
+    "description": "Testing repository creation via API",
+    "visibility": "public",  # or "private", "internal"
+    "initialize_with_readme": True
+}
+
+headers = {
+    "Authorization": f"Bearer {GITLAB_PERSONAL_ACCESS_TOKEN}",
+    "Content-Type": "application/json"
+}
+
+response = requests.post(
+    f"{GITLAB_API_URL}/projects",
+    headers=headers,
+    json=options  # Automatically handles JSON encoding
+)
+
+if response.status_code == 201:
+    print("Repository created successfully!")
+    print(response.json())
+else:
+    print(f"Failed to create repository. Status: {response.status_code}")
+    print(response.text)
